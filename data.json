@@ -2,11 +2,133 @@
   "rounds": [
     {
       "round": 1,
-      "series": []
+      "series": [
+        {
+          "t1": "Sabres",
+          "t2": "Bruins",
+          "w1": 4,
+          "w2": 2,
+          "winner": "Sabres",
+          "totalGames": 6
+        },
+        {
+          "t1": "Lightning",
+          "t2": "Canadiens",
+          "w1": 3,
+          "w2": 4,
+          "winner": "Canadiens",
+          "totalGames": 7
+        },
+        {
+          "t1": "Hurricanes",
+          "t2": "Senators",
+          "w1": 4,
+          "w2": 0,
+          "winner": "Hurricanes",
+          "totalGames": 4
+        },
+        {
+          "t1": "Penguins",
+          "t2": "Flyers",
+          "w1": 2,
+          "w2": 4,
+          "winner": "Flyers",
+          "totalGames": 6
+        },
+        {
+          "t1": "Avalanche",
+          "t2": "Kings",
+          "w1": 4,
+          "w2": 0,
+          "winner": "Avalanche",
+          "totalGames": 4
+        },
+        {
+          "t1": "Stars",
+          "t2": "Wild",
+          "w1": 2,
+          "w2": 4,
+          "winner": "Wild",
+          "totalGames": 6
+        },
+        {
+          "t1": "Golden Knights",
+          "t2": "Mammoth",
+          "w1": 4,
+          "w2": 2,
+          "winner": "Golden Knights",
+          "totalGames": 6
+        },
+        {
+          "t1": "Oilers",
+          "t2": "Ducks",
+          "w1": 2,
+          "w2": 4,
+          "winner": "Ducks",
+          "totalGames": 6
+        }
+      ]
     },
     {
       "round": 2,
-      "series": []
+      "series": [
+        {
+          "t1": "Sabres",
+          "t2": "Canadiens",
+          "w1": 0,
+          "w2": 0,
+          "winner": null,
+          "totalGames": 0
+        },
+        {
+          "t1": "Hurricanes",
+          "t2": "Flyers",
+          "w1": 1,
+          "w2": 0,
+          "winner": null,
+          "totalGames": 1
+        },
+        {
+          "t1": "Avalanche",
+          "t2": "Wild",
+          "w1": 1,
+          "w2": 0,
+          "winner": null,
+          "totalGames": 1
+        },
+        {
+          "t1": "Golden Knights",
+          "t2": "Ducks",
+          "w1": 0,
+          "w2": 0,
+          "winner": null,
+          "totalGames": 0
+        },
+        {
+          "t1": "?",
+          "t2": "?",
+          "w1": 0,
+          "w2": 0,
+          "winner": null,
+          "totalGames": 0
+        },
+        {
+          "t1": "?",
+          "t2": "?",
+          "w1": 0,
+          "w2": 0,
+          "winner": null,
+          "totalGames": 0
+        },
+        {
+          "t1": "?",
+          "t2": "?",
+          "w1": 0,
+          "w2": 0,
+          "winner": null,
+          "totalGames": 0
+        }
+      ]
     },
     {
       "round": 3,
@@ -15,51 +137,7 @@
     {
       "round": 4,
       "series": []
-    },
-    {
-      "round": 5,
-      "series": []
-    },
-    {
-      "round": 6,
-      "series": []
-    },
-    {
-      "round": 7,
-      "series": []
-    },
-    {
-      "round": 8,
-      "series": []
-    },
-    {
-      "round": 9,
-      "series": []
-    },
-    {
-      "round": 10,
-      "series": []
-    },
-    {
-      "round": 11,
-      "series": []
-    },
-    {
-      "round": 12,
-      "series": []
-    },
-    {
-      "round": 13,
-      "series": []
-    },
-    {
-      "round": 14,
-      "series": []
-    },
-    {
-      "round": 15,
-      "series": []
     }
   ],
-  "lastUpdated": "2026-05-04T08:56:37.207Z"
+  "lastUpdated": "2026-05-04T09:01:10.130Z"
 }
