@@ -352,13 +352,18 @@ function seriesWinProb(s) {
 function monteCarlo(rounds, ITER=10000) {
   const players = ['cf','ea','ai'];
   const wins = {cf:0, ea:0, ai:0};
-  const probs = rounds.map(r => (r.series||[]).map(s => seriesWinProb(s)));
+  const probs = rounds.map(r =>
+    (r.series||[]).map(s => s.t1 === '?' ? null : seriesWinProb(s))
+  );
 
   for (let i=0; i<ITER; i++) {
     const sim = rounds.map((r, ri) =>
       (r.series||[]).map((s, si) => {
         if (s.winner) return null;
-        return Math.random() < probs[ri][si].t1 ? s.t1 : s.t2;
+        if (s.t1 === '?') return null;
+        const prob = probs[ri][si];
+        if (!prob) return null;
+        return Math.random() < prob.t1 ? s.t1 : s.t2;
       })
     );
     const {scores} = calcScores(rounds, sim);
@@ -368,6 +373,7 @@ function monteCarlo(rounds, ITER=10000) {
   }
 
   const total = wins.cf + wins.ea + wins.ai;
+  if (total === 0) return {cf:33, ea:33, ai:34};
   return {
     cf: Math.round(wins.cf/total*100),
     ea: Math.round(wins.ea/total*100),
