@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stanley Cup Tips 2026 — CF vs EA vs AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cf: #c0392b; --ea: #2471a3; --ai: #1e8449;
+    --bg: #0a0d12; --bg2: #111520; --bg3: #181d2a;
+    --border: rgba(255,255,255,0.07);
+    --text: #e8eaf0; --muted: #7a8099; --gold: #d4ac0d;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: var(--bg); color: var(--text); font-family: 'Barlow', sans-serif; }
+  body { max-width: 900px; margin: 0 auto; padding: 0 1rem 3rem; }
+
+  header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    padding: 2rem 0 1.25rem; border-bottom: 1px solid var(--border); margin-bottom: 1.5rem;
+  }
+  .logo { font-family: 'Barlow Condensed', sans-serif; }
+  .logo h1 { font-size: 28px; font-weight: 700; letter-spacing: 0.03em; color: #fff; }
+  .logo p { font-size: 13px; color: var(--muted); margin-top: 2px; }
+  .live-badge { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--muted); }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: #27ae60; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  .scoreboard { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px; }
+  .score-card {
+    background: var(--bg2); border: 1px solid var(--border); border-radius: 10px;
+    padding: 1.25rem 1rem; text-align: center; position: relative; overflow: hidden;
+  }
+  .score-card::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; }
+  .score-card.cf::before { background: var(--cf); }
+  .score-card.ea::before { background: var(--ea); }
+  .score-card.ai::before { background: var(--ai); }
+  .score-card.leader { border-color: rgba(212,172,13,0.4); }
+  .leader-badge { position:absolute; top:8px; right:8px; font-size:9px; letter-spacing:0.08em; color:var(--gold); font-family:'Barlow Condensed',sans-serif; font-weight:600; }
+  .sc-name { font-size:11px; color:var(--muted); letter-spacing:0.06em; margin-bottom:8px; font-family:'Barlow Condensed',sans-serif; }
+  .sc-score { font-size:42px; font-weight:700; font-family:'Barlow Condensed',sans-serif; line-height:1; }
+  .sc-score.cf { color: var(--cf); } .sc-score.ea { color: var(--ea); } .sc-score.ai { color: var(--ai); }
+  .sc-sub { font-size:11px; color:var(--muted); margin-top:6px; }
+  .sc-proj { font-size:12px; color:var(--muted); margin-top:3px; }
+  .sc-proj span { color:var(--text); font-weight:500; }
+
+  .prob-wrap { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:1rem 1.25rem; margin-bottom:1.5rem; }
+  .prob-header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
+  .prob-label { font-size:11px; color:var(--muted); letter-spacing:0.06em; font-family:'Barlow Condensed',sans-serif; font-weight:600; }
+  .prob-meta { font-size:10px; color:var(--muted); }
+  .prob-bar { display:flex; border-radius:4px; overflow:hidden; height:28px; }
+  .prob-seg { display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; color:#fff; transition:width 0.8s ease; font-family:'Barlow Condensed',sans-serif; overflow:hidden; }
+  .prob-seg.cf { background: var(--cf); } .prob-seg.ea { background: var(--ea); } .prob-seg.ai { background: var(--ai); }
+  .prob-names { display:flex; justify-content:space-between; margin-top:6px; font-size:11px; }
+
+  .tabs { display:flex; gap:2px; margin-bottom:1rem; border-bottom:1px solid var(--border); }
+  .tab { padding:0.6rem 1.1rem; font-size:13px; cursor:pointer; color:var(--muted); border:none; background:none; border-bottom:2px solid transparent; margin-bottom:-1px; font-family:'Barlow',sans-serif; }
+  .tab:hover { color:var(--text); }
+  .tab.active { color:#fff; border-bottom-color:#fff; }
+
+  .panel { display:none; } .panel.active { display:block; }
+
+  .round-label { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:600; letter-spacing:0.1em; color:var(--muted); text-transform:uppercase; margin:1.25rem 0 0.5rem; }
+  .round-label:first-child { margin-top:0; }
+
+  .series-table { width:100%; border-collapse:collapse; }
+  .series-table th { font-size:10px; letter-spacing:0.06em; color:var(--muted); font-family:'Barlow Condensed',sans-serif; font-weight:600; padding:4px 10px; text-align:left; border-bottom:1px solid var(--border); }
+  .series-table th.r { text-align:right; }
+  .series-table td { padding:8px 10px; border-bottom:1px solid var(--border); font-size:13px; color:var(--text); }
+  .series-table tr:last-child td { border-bottom:none; }
+  .series-table tr:hover td { background:var(--bg3); }
+  .matchup { font-weight:500; }
+  .result { color:var(--muted); font-size:12px; } .result.done { color:var(--text); }
+  .pcf { color:var(--cf); font-size:12px; font-weight:500; text-align:right; }
+  .pea { color:var(--ea); font-size:12px; font-weight:500; text-align:right; }
+  .pai { color:var(--ai); font-size:12px; font-weight:500; text-align:right; }
+
+  .tb-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .tb-card { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:1rem 1.1rem; }
+  .tb-title { font-size:11px; color:var(--muted); letter-spacing:0.06em; margin-bottom:10px; font-family:'Barlow Condensed',sans-serif; font-weight:600; }
+  .tb-row { display:flex; justify-content:space-between; align-items:center; padding:4px 0; border-bottom:1px solid var(--border); font-size:13px; }
+  .tb-row:last-child { border-bottom:none; }
+  .tb-who { font-size:11px; font-weight:600; font-family:'Barlow Condensed',sans-serif; }
+  .tb-who.cf{color:var(--cf);} .tb-who.ea{color:var(--ea);} .tb-who.ai{color:var(--ai);} .tb-who.actual{color:var(--gold);}
+  .tb-val.actual { color:var(--gold); font-weight:500; }
+
+  .log-section { margin-bottom:1.5rem; }
+  .log-player { font-family:'Barlow Condensed',sans-serif; font-size:14px; font-weight:600; letter-spacing:0.04em; margin-bottom:6px; display:flex; align-items:baseline; gap:10px; }
+  .log-total { font-size:20px; font-weight:700; font-family:'Barlow Condensed',sans-serif; }
+  .log-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid var(--border); font-size:12px; color:var(--muted); }
+  .log-row:last-child { border-bottom:none; }
+  .log-pts { font-weight:600; } .log-pts.pos { color:#27ae60; } .log-pts.neg { color:#c0392b; }
+
+  footer { margin-top:2rem; padding-top:1rem; border-top:1px solid var(--border); font-size:11px; color:var(--muted); display:flex; justify-content:space-between; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <h1>Stanley Cup Tips 2026</h1>
+    <p>CF · EA · AI Claude</p>
+  </div>
+  <div class="live-badge">
+    <span class="dot"></span>
+    <span id="last-updated">Uppdateras dagligen 08:00 CET</span>
+  </div>
+</header>
+
+<div class="scoreboard">
+  <div class="score-card cf" id="card-cf">
+    <div class="sc-name">CHRISTIAN (CF)</div>
+    <div class="sc-score cf" id="score-cf">—</div>
+    <div class="sc-sub" id="max-cf">av — möjliga</div>
+    <div class="sc-proj">Proj: <span id="proj-cf">—</span></div>
+  </div>
+  <div class="score-card ea" id="card-ea">
+    <div class="sc-name">EMIL (EA)</div>
+    <div class="sc-score ea" id="score-ea">—</div>
+    <div class="sc-sub" id="max-ea">av — möjliga</div>
+    <div class="sc-proj">Proj: <span id="proj-ea">—</span></div>
+  </div>
+  <div class="score-card ai" id="card-ai">
+    <div class="sc-name">AI CLAUDE</div>
+    <div class="sc-score ai" id="score-ai">—</div>
+    <div class="sc-sub" id="max-ai">av — möjliga</div>
+    <div class="sc-proj">Proj: <span id="proj-ai">—</span></div>
+  </div>
+</div>
+
+<div class="prob-wrap">
+  <div class="prob-header">
+    <div class="prob-label">VINNARSANNOLIKHET</div>
+    <div class="prob-meta">Monte Carlo · 10 000 iter · 60/40 seedningsmodell</div>
+  </div>
+  <div class="prob-bar">
+    <div class="prob-seg cf" id="prob-cf" style="width:33%">CF 33%</div>
+    <div class="prob-seg ea" id="prob-ea" style="width:33%">EA 33%</div>
+    <div class="prob-seg ai" id="prob-ai" style="width:34%">AI 34%</div>
+  </div>
+  <div class="prob-names">
+    <span style="color:var(--cf)">Christian</span>
+    <span style="color:var(--ea)">Emil</span>
+    <span style="color:var(--ai)">AI Claude</span>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('series',this)">Serier</button>
+  <button class="tab" onclick="showTab('picks',this)">Alla picks</button>
+  <button class="tab" onclick="showTab('tiebreakers',this)">Tiebreakers</button>
+  <button class="tab" onclick="showTab('log',this)">Poänglogg</button>
+</div>
+
+<div class="panel active" id="panel-series">
+  <div id="series-content" style="color:var(--muted);font-size:13px;padding:1rem 0">Laddar...</div>
+</div>
+
+<div class="panel" id="panel-picks">
+  <div class="round-label">First round — West</div>
+  <table class="series-table">
+    <tr><th>Matchup</th><th>Status</th><th class="r">CF</th><th class="r">EA</th><th class="r">AI</th></tr>
+    <tr><td class="matchup">COL vs LAK</td><td class="result">—</td><td class="pcf">COL i 5</td><td class="pea">COL i 5</td><td class="pai">COL i 5</td></tr>
+    <tr><td class="matchup">DAL vs MIN</td><td class="result">—</td><td class="pcf">DAL i 7</td><td class="pea">DAL i 7</td><td class="pai">DAL i 6</td></tr>
+    <tr><td class="matchup">VGK vs UTA</td><td class="result">—</td><td class="pcf">VGK i 6</td><td class="pea">VGK i 5</td><td class="pai">VGK i 6</td></tr>
+    <tr><td class="matchup">EDM vs ANA</td><td class="result">—</td><td class="pcf">EDM i 6</td><td class="pea">EDM i 6</td><td class="pai">EDM i 6</td></tr>
+  </table>
+  <div class="round-label">First round — East</div>
+  <table class="series-table">
+    <tr><th>Matchup</th><th>Status</th><th class="r">CF</th><th class="r">EA</th><th class="r">AI</th></tr>
+    <tr><td class="matchup">BUF vs BOS</td><td class="result">—</td><td class="pcf">BUF i 7</td><td class="pea">BOS i 6</td><td class="pai">BUF i 6</td></tr>
+    <tr><td class="matchup">TBL vs MTL</td><td class="result">—</td><td class="pcf">TBL i 7</td><td class="pea">TBL i 5</td><td class="pai">TBL i 6</td></tr>
+    <tr><td class="matchup">CAR vs OTT</td><td class="result">—</td><td class="pcf">CAR i 6</td><td class="pea">CAR i 6</td><td class="pai">CAR i 5</td></tr>
+    <tr><td class="matchup">PIT vs PHI</td><td class="result">—</td><td class="pcf">PIT i 7</td><td class="pea">PIT i 7</td><td class="pai">PIT i 7</td></tr>
+  </table>
+  <div class="round-label">Second round</div>
+  <table class="series-table">
+    <tr><th>Matchup</th><th>Status</th><th class="r">CF</th><th class="r">EA</th><th class="r">AI</th></tr>
+    <tr><td class="matchup">West upper</td><td class="result">—</td><td class="pcf">COL</td><td class="pea">COL</td><td class="pai">COL</td></tr>
+    <tr><td class="matchup">West lower</td><td class="result">—</td><td class="pcf">VGK</td><td class="pea">VGK</td><td class="pai">VGK</td></tr>
+    <tr><td class="matchup">East upper</td><td class="result">—</td><td class="pcf">BUF</td><td class="pea">BOS</td><td class="pai">BUF</td></tr>
+    <tr><td class="matchup">East lower</td><td class="result">—</td><td class="pcf">CAR</td><td class="pea">CAR</td><td class="pai">CAR</td></tr>
+  </table>
+  <div class="round-label">Conference finals</div>
+  <table class="series-table">
+    <tr><th>Matchup</th><th>Status</th><th class="r">CF</th><th class="r">EA</th><th class="r">AI</th></tr>
+    <tr><td class="matchup">West final</td><td class="result">—</td><td class="pcf">COL</td><td class="pea">DAL</td><td class="pai">COL</td></tr>
+    <tr><td class="matchup">East final</td><td class="result">—</td><td class="pcf">TBL</td><td class="pea">TBL</td><td class="pai">BUF</td></tr>
+  </table>
+  <div class="round-label">Stanley Cup Final</div>
+  <table class="series-table">
+    <tr><th>Matchup</th><th>Status</th><th class="r">CF</th><th class="r">EA</th><th class="r">AI</th></tr>
+    <tr><td class="matchup" style="font-weight:600;color:#fff">SC Winner</td><td class="result">—</td><td class="pcf">COL</td><td class="pea">DAL</td><td class="pai">COL</td></tr>
+  </table>
+</div>
+
+<div class="panel" id="panel-tiebreakers">
+  <div class="tb-grid">
+    <div class="tb-card">
+      <div class="tb-title">CONN SMYTHE</div>
+      <div class="tb-row"><span class="tb-who cf">CF</span><span class="tb-val">Makar</span></div>
+      <div class="tb-row"><span class="tb-who ea">EA</span><span class="tb-val">McKinnon</span></div>
+      <div class="tb-row"><span class="tb-who ai">AI</span><span class="tb-val">McKinnon</span></div>
+      <div class="tb-row"><span class="tb-who actual">FAKTISK</span><span class="tb-val actual">— (ej klart)</span></div>
+    </div>
+    <div class="tb-card">
+      <div class="tb-title">MOST GOALS (PLAYOFFS)</div>
+      <div class="tb-row"><span class="tb-who cf">CF</span><span class="tb-val">McKinnon</span></div>
+      <div class="tb-row"><span class="tb-who ea">EA</span><span class="tb-val">McKinnon</span></div>
+      <div class="tb-row"><span class="tb-who ai">AI</span><span class="tb-val">McKinnon</span></div>
+      <div class="tb-row"><span class="tb-who actual">LEDARE</span><span class="tb-val actual">— (ej tillgängligt)</span></div>
+    </div>
+    <div class="tb-card">
+      <div class="tb-title">BEST SV% (MIN 8 MATCHER)</div>
+      <div class="tb-row"><span class="tb-who cf">CF</span><span class="tb-val">Vasilevsky</span></div>
+      <div class="tb-row"><span class="tb-who ea">EA</span><span class="tb-val">Vasilevsky</span></div>
+      <div class="tb-row"><span class="tb-who ai">AI</span><span class="tb-val">Wedgewood</span></div>
+      <div class="tb-row"><span class="tb-who actual">LEDARE</span><span class="tb-val actual">— (ej tillgängligt)</span></div>
+    </div>
+    <div class="tb-card">
+      <div class="tb-title">MÅL I FINALEN</div>
+      <div class="tb-row"><span class="tb-who cf">CF</span><span class="tb-val">31 mål</span></div>
+      <div class="tb-row"><span class="tb-who ea">EA</span><span class="tb-val">23 mål</span></div>
+      <div class="tb-row"><span class="tb-who ai">AI</span><span class="tb-val">33 mål</span></div>
+      <div class="tb-row"><span class="tb-who actual">FAKTISKT</span><span class="tb-val actual">— (ej spelat)</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="panel" id="panel-log">
+  <div id="log-content" style="color:var(--muted);font-size:13px;padding:1rem 0">Laddar...</div>
+</div>
+
+<footer>
+  <span>Stanley Cup Playoffs 2026 — CF vs EA vs AI</span>
+  <span>github.com/nvgholding-max/nhl-tips-2026</span>
+</footer>
+
+<script>
+const PICKS = {
+  cf: {
+    r1: {
+      'Avalanche':      {opponent:'Kings',            games:5},
+      'Stars':          {opponent:'Wild',             games:7},
+      'Golden Knights': {opponent:'Utah Hockey Club', games:6},
+      'Oilers':         {opponent:'Ducks',            games:6},
+      'Sabres':         {opponent:'Bruins',           games:7},
+      'Lightning':      {opponent:'Canadiens',        games:7},
+      'Hurricanes':     {opponent:'Senators',         games:6},
+      'Penguins':       {opponent:'Flyers',           games:7}
+    },
+    r2: ['Avalanche','Golden Knights','Sabres','Hurricanes'],
+    r3: ['Avalanche','Lightning'],
+    scWinner: 'Avalanche', finalGoals: 31
+  },
+  ea: {
+    r1: {
+      'Avalanche':      {opponent:'Kings',            games:5},
+      'Stars':          {opponent:'Wild',             games:7},
+      'Golden Knights': {opponent:'Utah Hockey Club', games:5},
+      'Oilers':         {opponent:'Ducks',            games:6},
+      'Bruins':         {opponent:'Sabres',           games:6},
+      'Lightning':      {opponent:'Canadiens',        games:5},
+      'Hurricanes':     {opponent:'Senators',         games:6},
+      'Penguins':       {opponent:'Flyers',           games:7}
+    },
+    r2: ['Avalanche','Golden Knights','Bruins','Hurricanes'],
+    r3: ['Stars','Lightning'],
+    scWinner: 'Stars', finalGoals: 23
+  },
+  ai: {
+    r1: {
+      'Avalanche':      {opponent:'Kings',            games:5},
+      'Stars':          {opponent:'Wild',             games:6},
+      'Golden Knights': {opponent:'Utah Hockey Club', games:6},
+      'Oilers':         {opponent:'Ducks',            games:6},
+      'Sabres':         {opponent:'Bruins',           games:6},
+      'Lightning':      {opponent:'Canadiens',        games:6},
+      'Hurricanes':     {opponent:'Senators',         games:5},
+      'Penguins':       {opponent:'Flyers',           games:7}
+    },
+    r2: ['Avalanche','Golden Knights','Sabres','Hurricanes'],
+    r3: ['Avalanche','Sabres'],
+    scWinner: 'Avalanche', finalGoals: 33
+  }
+};
+
+const ABBR = {
+  'Avalanche':'COL','Kings':'LAK','Stars':'DAL','Wild':'MIN',
+  'Golden Knights':'VGK','Utah Hockey Club':'UTA','Oilers':'EDM','Ducks':'ANA',
+  'Sabres':'BUF','Bruins':'BOS','Lightning':'TBL','Canadiens':'MTL',
+  'Hurricanes':'CAR','Senators':'OTT','Penguins':'PIT','Flyers':'PHI'
+};
+function abbr(n) { return ABBR[n] || n; }
+function tm(a, b) {
+  const c = s => s.toLowerCase().replace(/the /g,'').trim();
+  return c(a).includes(c(b)) || c(b).includes(c(a));
+}
+
+// Score calculation — accepts simulated winners for unresolved series
+function calcScores(rounds, simWinners) {
+  const players = ['cf','ea','ai'];
+  const scores = {cf:0, ea:0, ai:0};
+  const log = {cf:[], ea:[], ai:[]};
+
+  function getSeries(ri) {
+    return ((rounds[ri]||{}).series||[]).map((s, si) => ({
+      ...s,
+      winner: s.winner || (simWinners && simWinners[ri] && simWinners[ri][si]) || null
+    }));
+  }
+
+  const r1 = getSeries(0), r2 = getSeries(1), r3 = getSeries(2), r4 = getSeries(3);
+
+  players.forEach(p => {
+    const picks = PICKS[p];
+
+    r1.forEach(s => {
+      const t = Object.keys(picks.r1).find(k =>
+        (tm(s.t1,k)||tm(s.t2,k)) &&
+        (tm(picks.r1[k].opponent,s.t1)||tm(picks.r1[k].opponent,s.t2))
+      );
+      if (!t || !s.winner) return;
+      if (tm(s.winner, t)) {
+        scores[p] += 5; log[p].push({text:`R1 rätt vinnare: ${abbr(t)}`, pts:5});
+        if (s.totalGames === picks.r1[t].games) { scores[p] += 2; log[p].push({text:`R1 rätt antal matcher (${picks.r1[t].games})`, pts:2}); }
+      } else {
+        scores[p] -= 1; log[p].push({text:`R1 fel: tippade ${abbr(t)}`, pts:-1});
+      }
+    });
+
+    r2.forEach(s => {
+      if (!s.winner) return;
+      const t = picks.r2.find(k => tm(s.t1,k)||tm(s.t2,k));
+      if (t && tm(s.winner, t)) { scores[p] += 10; log[p].push({text:`R2 rätt: ${abbr(t)}`, pts:10}); }
+    });
+
+    r3.forEach(s => {
+      if (!s.winner) return;
+      const t = picks.r3.find(k => tm(s.t1,k)||tm(s.t2,k));
+      if (!t) return;
+      if (tm(s.winner, t)) {
+        scores[p] += 15; log[p].push({text:`Conf. Final rätt: ${abbr(t)}`, pts:15});
+      } else {
+        const wasR1 = r1.find(rs => rs.winner && !tm(rs.winner,t) && (tm(rs.t1,t)||tm(rs.t2,t)));
+        const pen = wasR1 ? -5 : -2;
+        scores[p] += pen; log[p].push({text:`Conf. Final straff: ${abbr(t)} (ut i ${wasR1?'R1':'R2'})`, pts:pen});
+      }
+    });
+
+    r4.forEach(s => {
+      if (!s.winner) return;
+      if (tm(s.winner, picks.scWinner)) {
+        scores[p] += 25; log[p].push({text:`SC Winner rätt: ${abbr(picks.scWinner)}`, pts:25});
+      } else {
+        const wasR1 = r1.find(rs => rs.winner && !tm(rs.winner,picks.scWinner) && (tm(rs.t1,picks.scWinner)||tm(rs.t2,picks.scWinner)));
+        const pen = wasR1 ? -7 : -2;
+        scores[p] += pen; log[p].push({text:`SC straff: ${abbr(picks.scWinner)} (ut i ${wasR1?'R1':'senare'})`, pts:pen});
+      }
+    });
+  });
+
+  return {scores, log};
+}
+
+// Series win probability given current state, 60/40 top-seed model
+function seriesWinProb(s) {
+  if (s.winner) return {t1: s.winner===s.t1 ? 1:0, t2: s.winner===s.t2 ? 1:0};
+  const w1 = s.w1||0, w2 = s.w2||0;
+  const need1 = 4-w1, need2 = 4-w2;
+  // Recursive series win probability
+  function p(n1, n2, pg) {
+    if (n1<=0) return 1; if (n2<=0) return 0;
+    return pg*p(n1-1,n2,pg) + (1-pg)*p(n1,n2-1,pg);
+  }
+  const pT1 = p(need1, need2, 0.60);
+  return {t1: pT1, t2: 1-pT1};
+}
+
+function monteCarlo(rounds, ITER=10000) {
+  const players = ['cf','ea','ai'];
+  const wins = {cf:0, ea:0, ai:0};
+  const probs = rounds.map(r => (r.series||[]).map(s => seriesWinProb(s)));
+
+  for (let i=0; i<ITER; i++) {
+    const sim = rounds.map((r, ri) =>
+      (r.series||[]).map((s, si) => {
+        if (s.winner) return null;
+        return Math.random() < probs[ri][si].t1 ? s.t1 : s.t2;
+      })
+    );
+    const {scores} = calcScores(rounds, sim);
+    const best = Math.max(...players.map(p => scores[p]));
+    const tied = players.filter(p => scores[p]===best);
+    tied.forEach(p => wins[p] += 1/tied.length);
+  }
+
+  const total = wins.cf + wins.ea + wins.ai;
+  return {
+    cf: Math.round(wins.cf/total*100),
+    ea: Math.round(wins.ea/total*100),
+    ai: Math.round(wins.ai/total*100)
+  };
+}
+
+function calcPossible(rounds) {
+  const p = {cf:0,ea:0,ai:0};
+  [[0,7],[1,10],[2,15],[3,25]].forEach(([ri,pts]) => {
+    ((rounds[ri]||{}).series||[]).forEach(s => { if(!s.winner) ['cf','ea','ai'].forEach(k => p[k]+=pts); });
+  });
+  ['cf','ea','ai'].forEach(k => p[k]+=40);
+  return p;
+}
+
+function renderScores(scores, possible) {
+  ['cf','ea','ai'].forEach(p => {
+    const s = scores[p], m = s+possible[p];
+    document.getElementById('score-'+p).textContent = (s>=0?'+':'')+s;
+    document.getElementById('max-'+p).textContent = 'av '+m+' möjliga';
+    document.getElementById('proj-'+p).textContent = Math.round(s+possible[p]*0.5)+'p';
+    const card = document.getElementById('card-'+p);
+    card.classList.remove('leader');
+    card.querySelector('.leader-badge')?.remove();
+  });
+  const leader = ['cf','ea','ai'].reduce((a,b) => scores[a]>=scores[b]?a:b);
+  const card = document.getElementById('card-'+leader);
+  card.classList.add('leader');
+  const badge = document.createElement('div');
+  badge.className='leader-badge'; badge.textContent='LEDARE';
+  card.appendChild(badge);
+}
+
+function renderProb(probs) {
+  ['cf','ea','ai'].forEach(p => {
+    const el = document.getElementById('prob-'+p);
+    el.style.width = probs[p]+'%';
+    el.textContent = probs[p]>=9 ? p.toUpperCase()+' '+probs[p]+'%' : '';
+  });
+}
+
+function renderSeries(rounds) {
+  const rNames = ['First round','Second round','Conference finals','Stanley Cup Final'];
+  let html = '';
+  rounds.forEach((r,ri) => {
+    if (!r.series?.length) return;
+    html += `<div class="round-label">${rNames[ri]}</div><table class="series-table"><tr><th>Matchup</th><th>Status</th></tr>`;
+    r.series.forEach(s => {
+      const status = s.winner
+        ? `<span class="result done">${abbr(s.winner)} vann ${Math.max(s.w1,s.w2)}-${Math.min(s.w1,s.w2)}</span>`
+        : `<span class="result">${abbr(s.t1)} ${s.w1||0}–${s.w2||0} ${abbr(s.t2)}</span>`;
+      html += `<tr><td class="matchup">${abbr(s.t1)} vs ${abbr(s.t2)}</td><td>${status}</td></tr>`;
+    });
+    html += '</table>';
+  });
+  document.getElementById('series-content').innerHTML =
+    html || '<div style="color:var(--muted);padding:1rem 0;font-size:13px">Ingen playoff-data tillgänglig ännu.</div>';
+}
+
+function renderLog(log, scores) {
+  const names = {cf:'Christian (CF)', ea:'Emil (EA)', ai:'AI Claude'};
+  const colors = {cf:'var(--cf)', ea:'var(--ea)', ai:'var(--ai)'};
+  let html = '';
+  ['cf','ea','ai'].forEach(p => {
+    const s = scores[p];
+    html += `<div class="log-section"><div class="log-player" style="color:${colors[p]}">${names[p]} <span class="log-total">${s>=0?'+':''}${s}p</span></div>`;
+    if (!log[p].length) {
+      html += '<div style="font-size:13px;color:var(--muted);padding:4px 0">Inga poäng ännu.</div>';
+    } else {
+      log[p].forEach(l => {
+        html += `<div class="log-row"><span>${l.text}</span><span class="log-pts ${l.pts>0?'pos':'neg'}">${l.pts>0?'+':''}${l.pts}p</span></div>`;
+      });
+    }
+    html += '</div>';
+  });
+  document.getElementById('log-content').innerHTML = html;
+}
+
+function showTab(name, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-'+name).classList.add('active');
+}
+
+async function loadData() {
+  try {
+    const r = await fetch('data.json?t='+Date.now());
+    const data = await r.json();
+    const rounds = data.rounds || [];
+
+    renderSeries(rounds);
+
+    const {scores, log} = calcScores(rounds, null);
+    const possible = calcPossible(rounds);
+    renderScores(scores, possible);
+    renderLog(log, scores);
+
+    // Monte Carlo after render
+    setTimeout(() => renderProb(monteCarlo(rounds, 10000)), 50);
+
+    if (data.lastUpdated) {
+      const d = new Date(data.lastUpdated);
+      document.getElementById('last-updated').textContent =
+        'Uppdaterad '+d.toLocaleString('sv-SE',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'});
+    }
+  } catch(e) {
+    console.error(e);
+    document.getElementById('series-content').innerHTML =
+      '<div style="color:var(--muted);font-size:13px;padding:1rem 0">Kunde inte ladda data.json.</div>';
+  }
+}
+
+loadData();
+</script>
+</body>
+</html>
