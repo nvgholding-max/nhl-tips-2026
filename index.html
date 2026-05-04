@@ -387,15 +387,74 @@ function calcRange(rounds, currentScores) {
   const r2 = (rounds[1]||{series:[]}).series||[];
   const r3 = (rounds[2]||{series:[]}).series||[];
   const r4 = (rounds[3]||{series:[]}).series||[];
+
+  // Build set of eliminated teams (lost in R1 or R2)
+  const eliminatedInR1 = new Set();
+  const eliminatedInR2 = new Set();
+  r1.forEach(s => {
+    if (!s.winner) return;
+    const loser = tm(s.winner, s.t1) ? s.t2 : s.t1;
+    eliminatedInR1.add(loser);
+  });
+  r2.forEach(s => {
+    if (!s.winner) return;
+    const loser = tm(s.winner, s.t1) ? s.t2 : s.t1;
+    eliminatedInR2.add(loser);
+  });
+
   const range = {};
   players.forEach(p => {
+    const picks = PICKS[p];
     let ceiling = currentScores[p];
     let floor = currentScores[p];
+
+    // R1 remaining
     r1.forEach(s => { if(s.winner) return; ceiling+=7; floor-=1; });
-    r2.forEach(s => { if(s.winner||s.t1==='?') return; ceiling+=10; });
-    r3.forEach(s => { if(s.winner) return; ceiling+=15; floor-=5; });
-    r4.forEach(s => { if(s.winner) return; ceiling+=25; floor-=7; });
-    ceiling+=40; // tiebreakers max
+
+    // R2 remaining
+    r2.forEach(s => { if(s.winner||s.t1==='?') return; ceiling+=10; floor+=0; });
+
+    // R3: guaranteed straff for picks already eliminated
+    // Also add ceiling/floor for unplayed R3 series
+    let r3Unplayed = 0;
+    picks.r3.forEach(t => {
+      const alreadyElimR1 = [...eliminatedInR1].some(e => tm(e, t));
+      const alreadyElimR2 = [...eliminatedInR2].some(e => tm(e, t));
+      // Find if this team is in an unplayed R3 series
+      const inUnplayedR3 = r3.some(s => !s.winner && (tm(s.t1,t)||tm(s.t2,t)));
+      const inPlayedR3 = r3.some(s => s.winner && (tm(s.t1,t)||tm(s.t2,t)));
+
+      if (alreadyElimR1) {
+        // Guaranteed -5 when R3 series is played (or already counted if R3 done)
+        if (!inPlayedR3) floor -= 5; // will happen, subtract from floor
+        ceiling -= 5; // also subtracts from ceiling — it is certain
+      } else if (alreadyElimR2) {
+        if (!inPlayedR3) { floor -= 2; ceiling -= 2; }
+      } else if (inUnplayedR3) {
+        ceiling += 15; // could get it right
+        floor -= 5;    // worst case: team was out in R1 equivalent (use -5 as worst)
+        r3Unplayed++;
+      }
+    });
+
+    // R4: guaranteed straff for SC winner pick already eliminated
+    const scElimR1 = [...eliminatedInR1].some(e => tm(e, picks.scWinner));
+    const scElimR2 = [...eliminatedInR2].some(e => tm(e, picks.scWinner));
+    const scInUnplayedR4 = r4.some(s => !s.winner && (tm(s.t1,picks.scWinner)||tm(s.t2,picks.scWinner)));
+    const scInPlayedR4 = r4.some(s => s.winner);
+
+    if (scElimR1 && !scInPlayedR4) {
+      floor -= 7; ceiling -= 7;
+    } else if (scElimR2 && !scInPlayedR4) {
+      floor -= 2; ceiling -= 2;
+    } else if (!scInPlayedR4 && !scElimR1 && !scElimR2) {
+      ceiling += 25;
+      floor -= 7;
+    }
+
+    // Tiebreakers
+    ceiling += 40;
+
     range[p] = { floor, ceiling };
   });
   return range;
