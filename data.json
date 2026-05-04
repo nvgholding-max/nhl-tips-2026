@@ -1,4 +1,65 @@
 {
-  "rounds": [],
-  "lastUpdated": "2026-05-04T08:46:32.006Z"
+  "rounds": [
+    {
+      "round": 1,
+      "series": []
+    },
+    {
+      "round": 2,
+      "series": []
+    },
+    {
+      "round": 3,
+      "series": []
+    },
+    {
+      "round": 4,
+      "series": []
+    },
+    {
+      "round": 5,
+      "series": []
+    },
+    {
+      "round": 6,
+      "series": []
+    },
+    {
+      "round": 7,
+      "series": []
+    },
+    {
+      "round": 8,
+      "series": []
+    },
+    {
+      "round": 9,
+      "series": []
+    },
+    {
+      "round": 10,
+      "series": []
+    },
+    {
+      "round": 11,
+      "series": []
+    },
+    {
+      "round": 12,
+      "series": []
+    },
+    {
+      "round": 13,
+      "series": []
+    },
+    {
+      "round": 14,
+      "series": []
+    },
+    {
+      "round": 15,
+      "series": []
+    }
+  ],
+  "lastUpdated": "2026-05-04T08:56:37.207Z"
 }
