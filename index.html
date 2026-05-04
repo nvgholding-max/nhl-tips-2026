@@ -42,16 +42,12 @@
   .sc-score { font-size:42px; font-weight:700; font-family:'Barlow Condensed',sans-serif; line-height:1; }
   .sc-score.cf { color: var(--cf); } .sc-score.ea { color: var(--ea); } .sc-score.ai { color: var(--ai); }
   .sc-sub { font-size:11px; color:var(--muted); margin-top:6px; }
+  .sc-range { font-size:15px; color:var(--muted); margin-top:8px; letter-spacing:0.02em; }
+  .sc-range .floor { color:#c0392b; font-weight:500; }
+  .sc-range .sep { color:var(--muted); margin:0 4px; }
+  .sc-range .ceil { color:#27ae60; font-weight:500; }
   .sc-proj { font-size:12px; color:var(--muted); margin-top:3px; }
   .sc-proj span { color:var(--text); font-weight:500; }
-
-  .prob-wrap { background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:1rem 1.25rem; margin-bottom:1.5rem; }
-  .prob-header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
-  .prob-label { font-size:11px; color:var(--muted); letter-spacing:0.06em; font-family:'Barlow Condensed',sans-serif; font-weight:600; }
-  .prob-meta { font-size:10px; color:var(--muted); }
-  .prob-bar { display:flex; border-radius:4px; overflow:hidden; height:28px; }
-  .prob-seg { display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; color:#fff; transition:width 0.8s ease; font-family:'Barlow Condensed',sans-serif; overflow:hidden; }
-  .prob-seg.cf { background: var(--cf); } .prob-seg.ea { background: var(--ea); } .prob-seg.ai { background: var(--ai); }
   .prob-names { display:flex; justify-content:space-between; margin-top:6px; font-size:11px; }
 
   .tabs { display:flex; gap:2px; margin-bottom:1rem; border-bottom:1px solid var(--border); }
@@ -112,26 +108,23 @@
   <div class="score-card cf" id="card-cf">
     <div class="sc-name">CHRISTIAN (CF)</div>
     <div class="sc-score cf" id="score-cf">—</div>
-    <div class="sc-sub" id="max-cf">floor – ceiling</div>
-    <div class="sc-proj">Median: <span id="proj-cf">—</span></div>
+    <div class="sc-range" id="max-cf">— – —</div>
+    <div class="sc-proj"><span id="proj-cf">—</span> median</div>
   </div>
   <div class="score-card ea" id="card-ea">
     <div class="sc-name">EMIL (EA)</div>
     <div class="sc-score ea" id="score-ea">—</div>
-    <div class="sc-sub" id="max-ea">floor – ceiling</div>
-    <div class="sc-proj">Median: <span id="proj-ea">—</span></div>
+    <div class="sc-range" id="max-ea">— – —</div>
+    <div class="sc-proj"><span id="proj-ea">—</span> median</div>
   </div>
   <div class="score-card ai" id="card-ai">
     <div class="sc-name">AI CLAUDE</div>
     <div class="sc-score ai" id="score-ai">—</div>
-    <div class="sc-sub" id="max-ai">floor – ceiling</div>
-    <div class="sc-proj">Median: <span id="proj-ai">—</span></div>
+    <div class="sc-range" id="max-ai">— – —</div>
+    <div class="sc-proj"><span id="proj-ai">—</span> median</div>
   </div>
 </div>
 
-<div class="prob-wrap">
-  <div class="prob-header">
-    <div class="prob-label">VINNARSANNOLIKHET</div>
     <div class="prob-meta">Monte Carlo · 10 000 iter · 60/40 seedningsmodell</div>
   </div>
   <div class="prob-bar">
@@ -464,7 +457,8 @@ function renderScores(scores, range) {
   ['cf','ea','ai'].forEach(p => {
     const s = scores[p];
     document.getElementById('score-'+p).textContent = (s>=0?'+':'')+s;
-    document.getElementById('max-'+p).textContent = range[p].floor+'p – '+range[p].ceiling+'p';
+    const el = document.getElementById('max-'+p);
+    el.innerHTML = '<span class="floor">'+range[p].floor+'p</span><span class="sep">–</span><span class="ceil">'+range[p].ceiling+'p</span>';
     document.getElementById('proj-'+p).textContent = Math.round((range[p].floor+range[p].ceiling)/2)+'p';
     const card = document.getElementById('card-'+p);
     card.classList.remove('leader');
@@ -478,13 +472,6 @@ function renderScores(scores, range) {
   card.appendChild(badge);
 }
 
-function renderProb(probs) {
-  ['cf','ea','ai'].forEach(p => {
-    const el = document.getElementById('prob-'+p);
-    el.style.width = probs[p]+'%';
-    el.textContent = probs[p]>=9 ? p.toUpperCase()+' '+probs[p]+'%' : '';
-  });
-}
 
 function renderSeries(rounds) {
   const rNames = ['First round','Second round','Conference finals','Stanley Cup Final'];
@@ -668,7 +655,6 @@ async function loadData() {
     renderScores(scores, range);
     renderLog(log, scores);
 
-    setTimeout(() => renderProb(monteCarlo(rounds, 10000)), 50);
 
     if (data.lastUpdated) {
       const d = new Date(data.lastUpdated);
