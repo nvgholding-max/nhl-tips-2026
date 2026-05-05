@@ -83,10 +83,10 @@
         {
           "t1": "Hurricanes",
           "t2": "Flyers",
-          "w1": 1,
+          "w1": 2,
           "w2": 0,
           "winner": null,
-          "totalGames": 1
+          "totalGames": 2
         },
         {
           "t1": "Avalanche",
@@ -99,10 +99,10 @@
         {
           "t1": "Golden Knights",
           "t2": "Ducks",
-          "w1": 0,
+          "w1": 1,
           "w2": 0,
           "winner": null,
-          "totalGames": 0
+          "totalGames": 1
         },
         {
           "t1": "?",
@@ -139,5 +139,5 @@
       "series": []
     }
   ],
-  "lastUpdated": "2026-05-04T09:01:10.130Z"
+  "lastUpdated": "2026-05-05T11:49:11.131Z"
 }
