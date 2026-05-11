@@ -76,9 +76,9 @@
           "t1": "Sabres",
           "t2": "Canadiens",
           "w1": 1,
-          "w2": 1,
+          "w2": 2,
           "winner": null,
-          "totalGames": 2
+          "totalGames": 3
         },
         {
           "t1": "Hurricanes",
@@ -100,21 +100,18 @@
           "t1": "Golden Knights",
           "t2": "Ducks",
           "w1": 2,
-          "w2": 1,
+          "w2": 2,
           "winner": null,
-          "totalGames": 3
-        },
+          "totalGames": 4
+        }
+      ]
+    },
+    {
+      "round": 3,
+      "series": [
         {
           "t1": "TBD",
           "t2": "Hurricanes",
-          "w1": 0,
-          "w2": 0,
-          "winner": null,
-          "totalGames": 0
-        },
-        {
-          "t1": "?",
-          "t2": "?",
           "w1": 0,
           "w2": 0,
           "winner": null,
@@ -131,13 +128,18 @@
       ]
     },
     {
-      "round": 3,
-      "series": []
-    },
-    {
       "round": 4,
-      "series": []
+      "series": [
+        {
+          "t1": "?",
+          "t2": "?",
+          "w1": 0,
+          "w2": 0,
+          "winner": null,
+          "totalGames": 0
+        }
+      ]
     }
   ],
-  "lastUpdated": "2026-05-10T10:47:54.157Z"
+  "lastUpdated": "2026-05-11T16:47:56.870Z"
 }
