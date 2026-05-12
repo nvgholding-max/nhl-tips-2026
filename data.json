@@ -91,10 +91,10 @@
         {
           "t1": "Avalanche",
           "t2": "Wild",
-          "w1": 2,
+          "w1": 3,
           "w2": 1,
           "winner": null,
-          "totalGames": 3
+          "totalGames": 4
         },
         {
           "t1": "Golden Knights",
@@ -141,5 +141,5 @@
       ]
     }
   ],
-  "lastUpdated": "2026-05-11T16:47:56.870Z"
+  "lastUpdated": "2026-05-12T13:25:21.127Z"
 }
