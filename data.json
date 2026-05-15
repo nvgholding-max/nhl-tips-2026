@@ -76,9 +76,9 @@
           "t1": "Sabres",
           "t2": "Canadiens",
           "w1": 2,
-          "w2": 2,
+          "w2": 3,
           "winner": null,
-          "totalGames": 4
+          "totalGames": 5
         },
         {
           "t1": "Hurricanes",
@@ -99,10 +99,10 @@
         {
           "t1": "Golden Knights",
           "t2": "Ducks",
-          "w1": 3,
+          "w1": 4,
           "w2": 2,
-          "winner": null,
-          "totalGames": 5
+          "winner": "Golden Knights",
+          "totalGames": 6
         }
       ]
     },
@@ -119,7 +119,7 @@
         },
         {
           "t1": "Avalanche",
-          "t2": "TBD",
+          "t2": "Golden Knights",
           "w1": 0,
           "w2": 0,
           "winner": null,
@@ -141,5 +141,5 @@
       ]
     }
   ],
-  "lastUpdated": "2026-05-14T12:21:02.363Z"
+  "lastUpdated": "2026-05-15T13:15:24.749Z"
 }
