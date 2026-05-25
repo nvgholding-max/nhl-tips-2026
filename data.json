@@ -121,9 +121,9 @@
           "t1": "Avalanche",
           "t2": "Golden Knights",
           "w1": 0,
-          "w2": 2,
+          "w2": 3,
           "winner": null,
-          "totalGames": 2
+          "totalGames": 3
         }
       ]
     },
@@ -141,5 +141,5 @@
       ]
     }
   ],
-  "lastUpdated": "2026-05-24T11:50:39.087Z"
+  "lastUpdated": "2026-05-25T16:08:59.670Z"
 }
