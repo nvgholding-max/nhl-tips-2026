@@ -121,9 +121,9 @@
           "t1": "Avalanche",
           "t2": "Golden Knights",
           "w1": 0,
-          "w2": 3,
-          "winner": null,
-          "totalGames": 3
+          "w2": 4,
+          "winner": "Golden Knights",
+          "totalGames": 4
         }
       ]
     },
@@ -131,8 +131,8 @@
       "round": 4,
       "series": [
         {
-          "t1": "?",
-          "t2": "?",
+          "t1": "Golden Knights",
+          "t2": "TBD",
           "w1": 0,
           "w2": 0,
           "winner": null,
@@ -141,5 +141,5 @@
       ]
     }
   ],
-  "lastUpdated": "2026-05-26T18:06:28.712Z"
+  "lastUpdated": "2026-05-27T18:07:23.240Z"
 }
