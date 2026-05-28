@@ -112,10 +112,10 @@
         {
           "t1": "Hurricanes",
           "t2": "Canadiens",
-          "w1": 2,
+          "w1": 3,
           "w2": 1,
           "winner": null,
-          "totalGames": 3
+          "totalGames": 4
         },
         {
           "t1": "Avalanche",
@@ -141,5 +141,5 @@
       ]
     }
   ],
-  "lastUpdated": "2026-05-27T18:07:23.240Z"
+  "lastUpdated": "2026-05-28T18:21:40.660Z"
 }
