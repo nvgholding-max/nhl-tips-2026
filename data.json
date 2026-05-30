@@ -112,10 +112,10 @@
         {
           "t1": "Hurricanes",
           "t2": "Canadiens",
-          "w1": 3,
+          "w1": 4,
           "w2": 1,
-          "winner": null,
-          "totalGames": 4
+          "winner": "Hurricanes",
+          "totalGames": 5
         },
         {
           "t1": "Avalanche",
@@ -131,8 +131,8 @@
       "round": 4,
       "series": [
         {
-          "t1": "Golden Knights",
-          "t2": "TBD",
+          "t1": "Hurricanes",
+          "t2": "Golden Knights",
           "w1": 0,
           "w2": 0,
           "winner": null,
@@ -141,5 +141,5 @@
       ]
     }
   ],
-  "lastUpdated": "2026-05-29T10:43:27.177Z"
+  "lastUpdated": "2026-05-30T09:12:56.241Z"
 }
