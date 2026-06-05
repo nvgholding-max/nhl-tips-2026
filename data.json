@@ -133,13 +133,13 @@
         {
           "t1": "Hurricanes",
           "t2": "Golden Knights",
-          "w1": 0,
+          "w1": 1,
           "w2": 1,
           "winner": null,
-          "totalGames": 1
+          "totalGames": 2
         }
       ]
     }
   ],
-  "lastUpdated": "2026-06-04T10:37:26.182Z"
+  "lastUpdated": "2026-06-05T10:43:51.783Z"
 }
